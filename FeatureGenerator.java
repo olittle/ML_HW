@@ -18,7 +18,8 @@ public class FeatureGenerator {
     private static FastVector labels;
 
     static {
-	features = new String[] { "firstName0", "firstNameN" };
+	features = new String[] { "firstName0", "firstName1", "firstName2", "firstName3", "firstName4", 
+								"lastName0","lastName1","lastName2","lastName3", "lastName4"};
 
 	List<String> ff = new ArrayList<String>();
 
@@ -26,6 +27,8 @@ public class FeatureGenerator {
 	    for (char letter = 'a'; letter <= 'z'; letter++) {
 		ff.add(f + "=" + letter);
 	    }
+	    // add a special character 
+	    ff.add(f + "=" + "$");
 	}
 
 	features = ff.toArray(new String[ff.size()]);
@@ -63,7 +66,7 @@ public class FeatureGenerator {
 
 	Instances instances;
 
-	FastVector attributes = new FastVector(9);
+	FastVector attributes = new FastVector(271);
 	for (String featureName : features) {
 	    attributes.addElement(new Attribute(featureName, zeroOne));
 	}
@@ -84,14 +87,33 @@ public class FeatureGenerator {
 	String[] parts = inputLine.split("\\s+");
 	String label = parts[0];
 	String firstName = parts[1].toLowerCase();
+	String lastName = parts[2].toLowerCase();
 
 	Instance instance = new Instance(features.length + 1);
 	instance.setDataset(instances);
 
 	Set<String> feats = new HashSet<String>();
-
-	feats.add("firstName0=" + firstName.charAt(0));
-	feats.add("firstNameN=" + firstName.charAt(firstName.length() - 1));
+	
+	String feature;
+	for (int i = 0; i < firstName.length(); i ++){
+		feature = "firstName" +   Integer.toString(i) + "=" + firstName.charAt(i); 
+		feats.add(feature); 
+	}
+	for (int i = firstName.length(); i < 5; i ++){
+		feature = "firstName" +   Integer.toString(i) + "=$" ; 
+		feats.add(feature); 
+	}
+	for (int i = 0; i < lastName.length(); i ++){
+		feature = "lastName" +   Integer.toString(i) + "=" + lastName.charAt(i); 
+		feats.add(feature); 
+	}
+	for (int i = lastName.length(); i < 5; i ++){
+		feature = "lastName" +  Integer.toString(i)  + "=$" ; 
+		feats.add(feature); 
+	}
+	
+//	feats.add("firstName0=" + firstName.charAt(0));
+//	feats.add("firstNameN=" + firstName.charAt(firstName.length() - 1));
 
 	for (int featureId = 0; featureId < features.length; featureId++) {
 	    Attribute att = instances.attribute(features[featureId]);

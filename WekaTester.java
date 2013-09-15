@@ -30,7 +30,7 @@ public class WekaTester {
 
 	// An example depth. If this value is -1, then the tree is grown to full
 	// depth.
-	classifier.setMaxDepth(14);
+	classifier.setMaxDepth(-1);
 
 	// Train
 	classifier.buildClassifier(train);
